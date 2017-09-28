@@ -1,0 +1,25 @@
+package: github.com/trusch/authy
+import:
+- package: github.com/gorilla/mux
+  version: ^1.5.0
+- package: github.com/mitchellh/go-homedir
+- package: github.com/sirupsen/logrus
+  version: ^1.0.3
+- package: github.com/spf13/cobra
+- package: github.com/spf13/viper
+  version: ^1.0.0
+- package: github.com/trusch/crud
+  version: ^0.1.1
+- package: github.com/trusch/streamstore
+  version: ^0.1.0
+- package: golang.org/x/crypto
+  subpackages:
+  - bcrypt
+- package: github.com/xeipuuv/gojsonschema
+- package: github.com/dgrijalva/jwt-go
+  version: ^3.0.0
+testImport:
+- package: github.com/onsi/ginkgo
+  version: ^1.4.0
+- package: github.com/onsi/gomega
+  version: ^1.2.0
