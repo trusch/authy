@@ -4,6 +4,6 @@ ADD authy /bin/authy
 
 CMD /bin/authy \
   --http-address :80 \
-  --keyfile /srv/authy/key.pem \
-  --webroot /srv/authy/webroot \
+  --private-key /srv/authy/authy.key \
+  --public-key /srv/authy/authy.crt \
   --storage xz+file:///srv/authy/storage

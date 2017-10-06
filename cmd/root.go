@@ -41,10 +41,10 @@ var RootCmd = &cobra.Command{
 	Long:  `An authentication server which provides signed JSON web token to its users.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		addr := viper.GetString("http-address")
-		webroot := viper.GetString("webroot")
 		storageURI := viper.GetString("storage")
-		keyfile := viper.GetString("keyfile")
-		log.Fatal(http.Serve(addr, webroot, storageURI, nil, keyfile))
+		privateKey := viper.GetString("private-key")
+		publicKey := viper.GetString("public-key")
+		log.Fatal(http.Serve(addr, storageURI, nil, privateKey, publicKey))
 	},
 }
 
@@ -66,9 +66,9 @@ func init() {
 	// will be global for your application.
 	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.authy.yaml)")
 	RootCmd.PersistentFlags().String("http-address", ":8080", "http address")
-	RootCmd.PersistentFlags().String("webroot", ".", "webroot directory")
 	RootCmd.PersistentFlags().String("storage", "xz+file:///var/lib/authy.db", "storage uri")
-	RootCmd.PersistentFlags().String("keyfile", "key.pem", "private key file to sign tokens")
+	RootCmd.PersistentFlags().String("private-key", "authy.key", "private key file to sign tokens")
+	RootCmd.PersistentFlags().String("public-key", "authy.crt", "public key file to verify tokens")
 
 	viper.BindPFlags(RootCmd.PersistentFlags())
 }

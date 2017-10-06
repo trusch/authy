@@ -45,4 +45,4 @@ image: authy
 	cd docker && docker build -t trusch/authy .
 
 clean:
-	rm -rf authy vendor glide.lock
+	rm -rf authy vendor glide.lock docker/authy

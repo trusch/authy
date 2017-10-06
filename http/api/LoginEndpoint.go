@@ -21,7 +21,7 @@ type LoginEndpoint struct {
 
 // LoginRequest is the struture of a Login Request (haha)
 type LoginRequest struct {
-	Username string     `json:"username"`
+	ID       string     `json:"id"`
 	Password string     `json:"password"`
 	Claims   jwt.Claims `json:"claims"`
 }
@@ -36,7 +36,7 @@ func (endpoint *LoginEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request)
 		w.Write([]byte(err.Error()))
 		return
 	}
-	userReader, err := endpoint.store.GetReader("user::" + req.Username)
+	userReader, err := endpoint.store.GetReader("user::" + req.ID)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
