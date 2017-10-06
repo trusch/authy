@@ -5,10 +5,14 @@ vendor: glide.lock
 		-u $(shell stat -c "%u:%g" .) \
 		-v $(shell pwd):/go/src/github.com/trusch/authy \
 		-w /go/src/github.com/trusch/authy \
-		golang:1.9 bash -c "\
-			curl https://glide.sh/get | sh;\
-			glide --home /tmp install;\
-		"
+		instrumentisto/glide:0.13 --home /tmp install
+
+glide.lock: glide.yaml
+	docker run \
+		-u $(shell stat -c "%u:%g" .) \
+		-v $(shell pwd):/go/src/github.com/trusch/authy \
+		-w /go/src/github.com/trusch/authy \
+		instrumentisto/glide:0.13 --home /tmp up
 
 fmt: $(shell find ./cmd ./http)
 	test $(shell docker run \
@@ -39,3 +43,6 @@ authy: $(shell find ./cmd ./http)
 image: authy
 	cp authy docker
 	cd docker && docker build -t trusch/authy .
+
+clean:
+	rm -rf authy vendor glide.lock
