@@ -1,4 +1,4 @@
-all: vendor fmt vet test build
+all: vendor fmt vet test authy image
 
 vendor: glide.lock
 	docker run \
@@ -7,7 +7,7 @@ vendor: glide.lock
 		-w /go/src/github.com/trusch/authy \
 		golang:1.9 bash -c "\
 			curl https://glide.sh/get | sh;\
-			glide install;\
+			glide --home /tmp install;\
 		"
 
 fmt: $(shell find ./cmd ./http)
@@ -28,10 +28,14 @@ test: $(shell find ./cmd ./http)
 		-v $(shell pwd):/go/src/github.com/trusch/authy \
 		golang:1.9 go test -cover github.com/trusch/authy/...
 
-build: $(shell find ./cmd ./http)
+authy: $(shell find ./cmd ./http)
 	docker run \
 		-u $(shell stat -c "%u:%g" .) \
 		-v $(shell pwd):/go/src/github.com/trusch/authy \
 		-w /go/src/github.com/trusch/authy \
 		-e CGO_ENABLED=0 \
 		golang:1.9 go build -v --ldflags '-extldflags "-static"'
+
+image: authy
+	cp authy docker
+	cd docker && docker build -t trusch/authy .

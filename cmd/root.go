@@ -1,4 +1,4 @@
-// Copyright © 2017 NAME HERE <EMAIL ADDRESS>
+// Copyright © 2017 Tino Rusch <tino.rusch@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,13 +37,8 @@ var cfgFile string
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:   "authy",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "a authentication server",
+	Long:  `An authentication server which provides signed JSON web token to its users.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		addr := viper.GetString("http-address")
 		webroot := viper.GetString("webroot")
@@ -69,11 +64,11 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
-	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.basic-go-http-backend.yaml)")
+	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.authy.yaml)")
 	RootCmd.PersistentFlags().String("http-address", ":8080", "http address")
 	RootCmd.PersistentFlags().String("webroot", ".", "webroot directory")
 	RootCmd.PersistentFlags().String("storage", "xz+file:///var/lib/authy.db", "storage uri")
-	RootCmd.PersistentFlags().String("keyfile", "key.pem", "storage uri")
+	RootCmd.PersistentFlags().String("keyfile", "key.pem", "private key file to sign tokens")
 
 	viper.BindPFlags(RootCmd.PersistentFlags())
 }
@@ -91,9 +86,9 @@ func initConfig() {
 			os.Exit(1)
 		}
 
-		// Search config in home directory with name ".basic-go-http-backend" (without extension).
+		// Search config in home directory with name ".authy" (without extension).
 		viper.AddConfigPath(home)
-		viper.SetConfigName(".basic-go-http-backend")
+		viper.SetConfigName(".authy")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match

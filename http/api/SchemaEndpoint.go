@@ -48,7 +48,6 @@ func (endpoint *SchemaEndpoint) handleSaveSchema(w http.ResponseWriter, r *http.
 	loader := gojsonschema.NewBytesLoader(bs)
 	_, err = gojsonschema.NewSchema(loader)
 	if err != nil {
-		log.Print(string(bs))
 		log.Errorf("try to post invalid json schema: %v", err)
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
